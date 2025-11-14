@@ -4,6 +4,7 @@ import { FilterSortBar } from '@/components/FilterSortBar'
 import { Sidebar } from '@/components/Sidebar'
 import { CityGrid } from '@/components/CityGrid'
 import { Footer } from '@/components/Footer'
+import { PersonalizationSection } from '@/components/PersonalizationSection'
 
 export default function Home() {
   return (
@@ -30,6 +31,11 @@ export default function Home() {
         </section>
 
         <FilterSortBar />
+
+        {/* Personalization Section */}
+        <section className="container px-4 py-8 border-b">
+          <PersonalizationSection />
+        </section>
 
         {/* Main Content: Sidebar + Grid */}
         <section className="container px-4 py-8">

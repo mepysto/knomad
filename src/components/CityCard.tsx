@@ -1,16 +1,33 @@
+'use client'
+
 import Image from 'next/image'
+import Link from 'next/link'
 import { Star, Wifi, ThumbsUp, Cloud, Wind, Train, Heart } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { City } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { useFavorites } from '@/contexts/FavoritesContext'
 
 interface CityCardProps {
   city: City
 }
 
 export function CityCard({ city }: CityCardProps) {
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites()
+  const isFav = isFavorite(city.id)
+
+  const handleHeartClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (isFav) {
+      removeFavorite(city.id)
+    } else {
+      addFavorite(city.id)
+    }
+  }
+
   const airQualityColor = {
     good: 'text-green-600',
     moderate: 'text-yellow-600',
@@ -25,6 +42,7 @@ export function CityCard({ city }: CityCardProps) {
           src={city.image_url}
           alt={city.name_kr}
           fill
+          quality={75}
           className="object-cover transition-transform group-hover:scale-105"
         />
         <div className="absolute top-2 right-2">
@@ -32,8 +50,17 @@ export function CityCard({ city }: CityCardProps) {
             size="icon"
             variant="secondary"
             className="h-8 w-8 rounded-full bg-white/90 hover:bg-white"
+            onClick={handleHeartClick}
+            aria-label={isFav ? `${city.name_kr} 즐겨찾기 제거` : `${city.name_kr} 즐겨찾기 추가`}
+            aria-pressed={isFav}
           >
-            <Heart className="h-4 w-4" />
+            <Heart
+              className={cn(
+                'h-4 w-4',
+                isFav ? 'fill-red-500 text-red-500' : 'text-gray-400'
+              )}
+              aria-hidden="true"
+            />
           </Button>
         </div>
         <div className="absolute top-2 left-2">
@@ -140,9 +167,11 @@ export function CityCard({ city }: CityCardProps) {
         )}
 
         {/* Action Button */}
-        <Button className="w-full" variant="outline">
-          자세히 보기
-        </Button>
+        <Link href={`/cities/${city.slug}`}>
+          <Button className="w-full" variant="outline">
+            자세히 보기
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   )

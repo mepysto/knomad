@@ -58,3 +58,16 @@ export type SortOption =
   | 'internet-fast'
   | 'air-quality'
   | 'popular'
+
+export interface Review {
+  id: number
+  citySlug: string
+  author: string
+  rating: number
+  title: string
+  content: string
+  date: string
+  helpful: number
+  notHelpful: number
+  isUserGenerated?: boolean
+}
